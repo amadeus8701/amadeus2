@@ -1,7 +1,9 @@
-from django.urls import re_path
-
+from channels.routing import ProtocolTypeRouter, URLRouter
+from django.urls import path
 from . import consumers
 
-websocket_urlpatterns = [
-    re_path(r'ws/file_changes/$', consumers.FileChangeConsumer.as_asgi()),
-]
+application = ProtocolTypeRouter({
+    "websocket": URLRouter([
+        path("ws/some_path/", consumers.MyConsumer.as_asgi()),
+    ]),
+})
