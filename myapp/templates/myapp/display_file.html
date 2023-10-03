@@ -1,24 +1,32 @@
+<!-- viewer/templates/viewer/index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>S3 파일 내용</title>
+    <title>파일 뷰어</title>
 </head>
 <body>
-    <h1>S3 파일 내용</h1>
-    <pre>
-        {{ content }}
-    </pre>
-
-    <script>
-        var socket = new WebSocket('ws://ec2-52-78-22-235.ap-northeast-2.compute.amazonaws.com:8080');
-
-        socket.onmessage = function (event) {
-            var data = JSON.parse(event.data);
-            if (data.message === '파일이 변경되었습니다.') {
-                location.reload();
-            }
-        };
-    </script>
+    <h1>파일 내용:</h1>
+    <pre>{{ file_contents }}</pre>
 </body>
 </html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+function updateFileContents() {
+    $.ajax({
+        url: '',
+        type: 'GET',
+        success: function(data) {
+            $('#file-contents').text(data);
+        },
+        complete: function() {
+            setTimeout(updateFileContents, 1000); // 1초마다 폴링
+        }
+    });
+}
+
+$(document).ready(function() {
+    updateFileContents();
+});
+</script>
