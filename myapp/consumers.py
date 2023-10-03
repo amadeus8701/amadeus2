@@ -1,13 +1,6 @@
 import json
 import asyncio
-from django.shortcuts import render
-from django.http import HttpResponse
 from channels.generic.websocket import AsyncWebsocketConsumer
-
-def display_file(request):
-    with open('/home/ubuntu/srv/text_file.txt', 'r') as file:
-        content = file.read()
-    return render(request, 'myapp/display_file.html', {'content': content})
 
 class FileChangeConsumer(AsyncWebsocketConsumer):
     async def connect(self):

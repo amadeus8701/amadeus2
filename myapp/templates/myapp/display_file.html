@@ -2,14 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>파일 내용</title>
+    <title>S3 파일 내용</title>
 </head>
 <body>
-    <h1>파일 내용</h1>
+    <h1>S3 파일 내용</h1>
     <pre>
-        {% for line in lines %}
-            {{ line }}
-        {% endfor %}
+        {{ content }}
     </pre>
+
+    <script>
+        var socket = new WebSocket('ws://' + window.location.host + '/ws/file_changes/');
+
+        socket.onmessage = function (event) {
+            var data = JSON.parse(event.data);
+            if (data.message === '파일이 변경되었습니다.') {
+                location.reload();
+            }
+        };
+    </script>
 </body>
 </html>
