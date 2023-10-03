@@ -11,7 +11,7 @@
     </pre>
 
     <script>
-        var socket = new WebSocket('ws://ec2-52-78-22-235.ap-northeast-2.compute.amazonaws.com:8080/some_path/');
+        var socket = new WebSocket('ws://ec2-52-78-22-235.ap-northeast-2.compute.amazonaws.com:8080');
 
         socket.onmessage = function (event) {
             var data = JSON.parse(event.data);
