@@ -47,7 +47,7 @@
         function pollFileContent() {
             // 파일 내용을 가져오기 위해 AJAX 요청을 보냅니다.
             fetch('/poll_file/', { method: 'GET' })
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(newContent => {
                     // 새로운 내용이 이전 내용과 다르다면 페이지를 업데이트하고 로그에 기록합니다.
                     if (newContent !== oldFileContent) {
