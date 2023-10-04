@@ -16,8 +16,10 @@
     <!-- 입력 내용을 보여줄 리스트 추가 -->
     <ul id="input-list">
         {% for input in inputs %}
-            <li>{{ input.input_text }} - {{ input.timestamp }}</li>
-        {% endfor %}
+        <li>{{ input.input_text }} - {{ input.timestamp }}</li>
+    {% empty %}
+        <li>No inputs available.</li>
+    {% endfor %}
     </ul>
     
     <script>
