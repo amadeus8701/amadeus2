@@ -1,7 +1,6 @@
-# viewer/urls.py
 from django.urls import path
-from . import views
+from myapp.views import display_text_file
 
 urlpatterns = [
-    path('', views.show_file, name='show_file'),
+    path('', display_text_file, name='display_text_file'),
 ]

@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-g1=!%0pc=#_x-3m^_pv*joov2=g_!4$g70j&f8zbd8=uqvfjyg
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'ec2-52-78-22-235.ap-northeast-2.compute.amazonaws.com' , 'localhost'
+    'ec2-52-78-22-235.ap-northeast-2.compute.amazonaws.com'
 ]
 
 
@@ -41,19 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
-    'channels',
 ]
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("localhost", 6379)],
-        },
-    },
-}
-
-ASGI_APPLICATION = 'myproject.routing.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

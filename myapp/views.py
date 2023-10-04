@@ -1,7 +1,6 @@
-# viewer/views.py
 from django.shortcuts import render
 
-def show_file(request):
+def display_text_file(request):
     with open('/home/ubuntu/srv/text_file.txt', 'r') as file:
-        file_contents = file.read()
-    return render(request, 'myapp/display_file.html', {'file_contents': file_contents})
+        content = file.read()
+    return render(request, 'myapp/index.html', {'content': content})
