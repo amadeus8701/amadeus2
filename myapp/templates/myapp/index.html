@@ -7,7 +7,41 @@
     <h1>Text File Content</h1>
     <pre id="file-content">{{ content }}</pre>
     
+    <!-- 새로운 입력을 받을 폼 -->
+    <form id="input-form">
+        <input type="text" id="new-input" placeholder="Enter a new input">
+        <button type="submit">Submit</button>
+    </form>
+    
+    <!-- 새로운 입력을 보여줄 로그 영역 -->
+    <h2>Real-Time Log</h2>
+    <ul id="log-list">
+        <!-- 이전 로그 항목들을 여기에 추가 -->
+    </ul>
+    
     <script>
+        // 폼 제출을 감지하고 새로운 입력을 페이지에 추가하고 로그에 기록합니다.
+        document.getElementById('input-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const newInput = document.getElementById('new-input').value;
+            if (newInput) {
+                // 입력을 페이지에 추가합니다.
+                const inputList = document.getElementById('input-list');
+                const listItem = document.createElement('li');
+                listItem.textContent = newInput;
+                inputList.appendChild(listItem);
+                
+                // 로그에 기록합니다.
+                const logList = document.getElementById('log-list');
+                const logItem = document.createElement('li');
+                logItem.textContent = `New Input: ${newInput}`;
+                logList.appendChild(logItem);
+
+                // 입력 필드를 지웁니다.
+                document.getElementById('new-input').value = '';
+            }
+        });
+
         function pollFileContent() {
             // 파일 내용을 가져오기 위해 AJAX 요청을 보냅니다.
             fetch('/poll_file/', { method: 'GET' })
@@ -17,6 +51,12 @@
                     const oldContent = document.getElementById('file-content').textContent;
                     if (newContent !== oldContent) {
                         document.getElementById('file-content').textContent = newContent;
+
+                        // 파일 내용의 변동을 로그에 기록합니다.
+                        const logList = document.getElementById('log-list');
+                        const logItem = document.createElement('li');
+                        logItem.textContent = `File Content Updated`;
+                        logList.appendChild(logItem);
                     }
                 });
         }
