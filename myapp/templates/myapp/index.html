@@ -17,41 +17,38 @@
         let oldFileContent = "{{ content.content }}"; // 초기 파일 내용을 저장합니다.
         let logCount = 0; // 로그 항목 개수를 추적합니다.
 
+        // WebSocket 연결을 생성합니다.
+        const socket = new WebSocket("ws://ec2-52-78-22-235.ap-northeast-2.compute.amazonaws.com:8080/ws/file_changes/");
+
+        // WebSocket 메시지를 받을 때마다 처리합니다.
+        socket.onmessage = function(event) {
+            const newContent = event.data;
+            // 파일 내용 업데이트 및 로그 추가 로직을 여기에 구현
+            if (newContent !== oldFileContent) {
+                const message = `Content Updated: ${oldFileContent} => ${newContent}`;
+                addLogMessage(message);
+
+                document.getElementById('file-content').textContent = newContent;
+                oldFileContent = newContent; // 변경된 내용을 저장합니다.
+            }
+        };
+
         function addLogMessage(message) {
             const logList = document.getElementById('log-list');
             const logItem = document.createElement('li');
             logItem.textContent = message;
             logList.appendChild(logItem);
             logCount++;
-            
+
             // 로그 항목이 15개를 초과하면 첫 번째 항목을 제거합니다.
             if (logCount > 15) {
                 logList.removeChild(logList.firstChild);
                 logCount--;
             }
-            
+
             // 스크롤을 항상 가장 아래로 유지합니다.
             logList.scrollTop = logList.scrollHeight;
         }
-
-        function pollFileContent() {
-            // 파일 내용을 가져오기 위해 AJAX 요청을 보냅니다.
-            fetch('/poll_file/', { method: 'GET' })
-                .then(response => response.text())
-                .then(newContent => {
-                    // 새로운 내용이 이전 내용과 다르다면 페이지를 업데이트하고 로그에 기록합니다.
-                    if (newContent !== oldFileContent) {
-                        const message = `Content Updated: ${oldFileContent} => ${newContent}`;
-                        addLogMessage(message);
-
-                        document.getElementById('file-content').textContent = newContent;
-                        oldFileContent = newContent; // 변경된 내용을 저장합니다.
-                    }
-                });
-        }
-
-        // 1초마다 파일 변경을 확인하기 위해 폴링 함수를 호출합니다.
-        setInterval(pollFileContent, 1000);
     </script>
 </body>
 </html>
