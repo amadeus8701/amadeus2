@@ -10,7 +10,7 @@
     <div id="file-contents"></div>
     
     <script>
-    const socket = new WebSocket('ws://ec2-52-78-22-235.ap-northeast-2.compute.amazonaws.com:8080/ws/update_file/');
+    const socket = new WebSocket('ws://ec2-52-78-22-235.ap-northeast-2.compute.amazonaws.com/ws/update_file/');
 
     socket.onmessage = function(event) {
         const fileContentsDiv = document.getElementById('file-contents');
