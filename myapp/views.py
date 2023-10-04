@@ -20,6 +20,8 @@ class UserInput(models.Model):
 
 from django.shortcuts import render
 from .models import UserInput
+from myapp.models import UserInputModel
+
 
 def display_inputs(request):
     inputs = UserInput.objects.all().order_by('-timestamp')
