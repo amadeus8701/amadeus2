@@ -5,6 +5,24 @@
 </head>
 <body>
     <h1>Text File Content</h1>
-    <pre>{{ content }}</pre>
+    <pre id="file-content">{{ content }}</pre>
+    
+    <script>
+        function pollFileContent() {
+            // 파일 내용을 가져오기 위해 AJAX 요청을 보냅니다.
+            fetch('/poll_file/', { method: 'GET' })
+                .then(response => response.text())
+                .then(newContent => {
+                    // 새로운 내용이 이전 내용과 다르다면 페이지를 업데이트합니다.
+                    const oldContent = document.getElementById('file-content').textContent;
+                    if (newContent !== oldContent) {
+                        document.getElementById('file-content').textContent = newContent;
+                    }
+                });
+        }
+
+        // 5초마다 파일 변경을 확인하기 위해 폴링 함수를 호출합니다.
+        setInterval(pollFileContent, 5000);
+    </script>
 </body>
 </html>

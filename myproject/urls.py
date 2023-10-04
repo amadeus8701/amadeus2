@@ -21,3 +21,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('myapp.urls')),
 ]
+
+from django.urls import path
+from myapp.views import display_text_file, poll_file_content
+
+urlpatterns = [
+    path('', display_text_file, name='display_text_file'),
+    path('poll_file/', poll_file_content, name='poll_file_content'),
+]
