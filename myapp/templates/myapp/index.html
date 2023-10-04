@@ -7,6 +7,19 @@
     <h1>Text File Content</h1>
     <pre id="file-content">{{ content }}</pre>
     
+    <!-- 새로운 입력을 받을 폼 추가 -->
+    <form id="input-form">
+        <input type="text" id="new-input" placeholder="새로운 입력">
+        <button type="button" onclick="addNewInput()">추가</button>
+    </form>
+
+    <!-- 입력 내용을 보여줄 리스트 추가 -->
+    <ul id="input-list">
+        {% for input in inputs %}
+            <li>{{ input.input_text }} - {{ input.timestamp }}</li>
+        {% endfor %}
+    </ul>
+    
     <script>
         function pollFileContent() {
             // 파일 내용을 가져오기 위해 AJAX 요청을 보냅니다.
@@ -23,6 +36,40 @@
 
         // 1초마다 파일 변경을 확인하기 위해 폴링 함수를 호출합니다.
         setInterval(pollFileContent, 1000);
+
+        // 새로운 입력을 추가하는 함수
+        function addNewInput() {
+            const newInput = document.getElementById('new-input').value;
+            if (newInput) {
+                // 서버에 새로운 입력을 전송
+                fetch('/add_input/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({ input_text: newInput }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // 입력이 성공적으로 추가되면 리스트에 추가
+                    const inputList = document.getElementById('input-list');
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${data.input_text} - ${data.timestamp}`;
+                    inputList.insertBefore(listItem, inputList.firstChild);
+                });
+
+                // 입력 필드 비우기
+                document.getElementById('new-input').value = '';
+            }
+        }
+
+        // CSRF 토큰을 얻는 함수
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
     </script>
 </body>
 </html>

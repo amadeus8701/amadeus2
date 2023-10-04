@@ -29,3 +29,11 @@ urlpatterns = [
     path('', display_text_file, name='display_text_file'),
     path('poll_file/', poll_file_content, name='poll_file_content'),
 ]
+
+from django.urls import path
+from myapp.views import display_inputs, add_input
+
+urlpatterns = [
+    path('', display_inputs, name='display_inputs'),
+    path('add_input/', add_input, name='add_input'),
+]
