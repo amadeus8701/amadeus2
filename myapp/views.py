@@ -19,18 +19,18 @@ class UserInput(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 from django.shortcuts import render
-from .models import UserInput
+from .models import UserInputmodel
 
 def display_inputs(request):
-    inputs = UserInput.objects.all().order_by('-timestamp')
+    inputs = UserInputmodel.objects.all().order_by('-timestamp')
     return render(request, 'index.html', {'inputs': inputs})
 
 from django.shortcuts import redirect
-from .models import UserInput
+from .models import UserInputmodel
 
 def add_input(request):
     if request.method == 'POST':
         input_text = request.POST.get('input_text')
         if input_text:
-            UserInput.objects.create(input_text=input_text)
+            UserInputmodel.objects.create(input_text=input_text)
     return redirect('display_inputs')
