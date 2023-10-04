@@ -19,9 +19,7 @@ class UserInput(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 from django.shortcuts import render
-from .models import UserInput
-from myapp.models import UserInputModel
-
+from .models import UserInputModel
 
 def display_inputs(request):
     inputs = UserInput.objects.all().order_by('-timestamp')
