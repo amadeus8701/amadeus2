@@ -34,17 +34,24 @@
             logList.scrollTop = logList.scrollHeight;
         }
 
-        // 웹 소켓 연결
-        let wsProtocol = (window.location.protocol === "https:") ? "wss://" : "ws://";
-        let socket = new WebSocket(wsProtocol + "ec2-52-78-22-235.ap-northeast-2.compute.amazonaws.com:8080/ws/file_changes/");
+        function pollFileContent() {
+            // 파일 내용을 가져오기 위해 AJAX 요청을 보냅니다.
+            fetch('/poll_file/', { method: 'GET' })
+                .then(response => response.text())
+                .then(newContent => {
+                    // 새로운 내용이 이전 내용과 다르다면 페이지를 업데이트하고 로그에 기록합니다.
+                    if (newContent !== oldFileContent) {
+                        const message = `Content Updated: ${oldFileContent} => ${newContent}`;
+                        addLogMessage(message);
 
-        socket.onmessage = function(event) {
-            const newContent = event.data;
-            const message = `Content Updated: ${oldFileContent} => ${newContent}`;
-            addLogMessage(message);
-            document.getElementById('file-content').textContent = newContent;
-            oldFileContent = newContent; // 변경된 내용을 저장합니다.
-        };
+                        document.getElementById('file-content').textContent = newContent;
+                        oldFileContent = newContent; // 변경된 내용을 저장합니다.
+                    }
+                });
+        }
+
+        // 1초마다 파일 변경을 확인하기 위해 폴링 함수를 호출합니다.
+        setInterval(pollFileContent, 1000);
     </script>
 </body>
 </html>
