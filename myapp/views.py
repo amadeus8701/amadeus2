@@ -23,7 +23,7 @@ from .models import UserInputmodel
 
 def display_inputs(request):
     inputs = UserInputmodel.objects.all().order_by('-timestamp')
-    return render(request, 'index.html', {'inputs': inputs})
+    return render(request, 'myapp/index.html', {'inputs': inputs})
 
 from django.shortcuts import redirect
 from .models import UserInputmodel
