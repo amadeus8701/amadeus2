@@ -1,5 +1,3 @@
-# myapp/consumers.py
-
 import os
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
