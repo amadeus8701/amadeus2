@@ -34,7 +34,7 @@
                 // 로그에 기록합니다.
                 const logList = document.getElementById('log-list');
                 const logItem = document.createElement('li');
-                logItem.textContent = `New Input: ${newInput}`;
+                logItem.textContent = `이전의 내용: ${newInput}`;
                 logList.appendChild(logItem);
 
                 // 입력 필드를 지웁니다.
@@ -55,7 +55,7 @@
                         // 파일 내용의 변동을 로그에 기록합니다.
                         const logList = document.getElementById('log-list');
                         const logItem = document.createElement('li');
-                        logItem.textContent = `File Content Updated`;
+                        logItem.textContent = `Content Updated`;
                         logList.appendChild(logItem);
                     }
                 });
