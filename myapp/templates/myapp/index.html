@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Text File Content</h1>
-    <pre id="file-content">{{ content }}</pre>
+    <pre id="file-content">{현재 화재 상황}</pre>
     
     <script>
         function pollFileContent() {
@@ -21,8 +21,8 @@
                 });
         }
 
-        // 5초마다 파일 변경을 확인하기 위해 폴링 함수를 호출합니다.
-        setInterval(pollFileContent, 5000);
+        // 1초마다 파일 변경을 확인하기 위해 폴링 함수를 호출합니다.
+        setInterval(pollFileContent, 1000);
     </script>
 </body>
 </html>
