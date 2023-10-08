@@ -36,18 +36,3 @@ urlpatterns = [
     path('', display_text_file, name='display_text_file'),
     path('poll_file/', poll_file_content, name='poll_file_content'),
 ]
-
-
-
-
-
-from django.urls import path
-from . import views
-
-app_name = 'image_viewer'
-
-urlpatterns = [
-    path('upload/', views.upload_image, name='upload_image'),
-    path('display/', views.display_images, name='display_images'),
-]
-
