@@ -22,3 +22,12 @@ def display_image(request):
     image_url = static(image_path)
     return render(request, 'myapp/index.html', {'image_url': image_url})
 
+from django.shortcuts import render
+from django.templatetags.static import static
+from django.http import JsonResponse
+
+def poll_image(request):
+    image_path = '/home/ubuntu/srv/screenshot.jpg'  # JPG 파일의 경로
+    image_url = static(image_path)
+    return JsonResponse({'image_url': image_url})
+
