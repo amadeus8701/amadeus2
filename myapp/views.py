@@ -18,11 +18,15 @@ def poll_file_content(request):
 
 
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Image
 
 def display_image(request):
-    latest_image = Image.objects.latest('uploaded_at')
+    try:
+        latest_image = Image.objects.latest('uploaded_at')
+    except Image.DoesNotExist:
+        latest_image = None
+    
     return render(request, 'myapp/index.html', {'latest_image': latest_image})
 
 from .forms import ImageForm
@@ -35,4 +39,6 @@ def upload_image(request):
     else:
         form = ImageForm()
     return render(request, 'myapp/index.html', {'form': form})
+
+
 
