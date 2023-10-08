@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Text File Content</title>
+    <title>Text and Image Content</title>
 </head>
 <body>
     <h1>Text File Content</h1>
     <pre id="file-content">{{ content.content }}</pre>
+    
+    <!-- 이미지 표시 영역 -->
+    <h2>Image</h2>
+    <img id="image-content" src="{{ image_url }}" alt="Image">
     
     <!-- 새로운 입력을 보여줄 로그 영역 -->
     <h2>Real-Time Log</h2>
@@ -15,6 +19,7 @@
     
     <script>
         let oldFileContent = "{{ content.content }}"; // 초기 파일 내용을 저장합니다.
+        let oldImageURL = "{{ image_url }}"; // 초기 이미지 URL을 저장합니다.
         let logCount = 0; // 로그 항목 개수를 추적합니다.
 
         function addLogMessage(message) {
@@ -35,17 +40,31 @@
         }
 
         function pollFileContent() {
-            // 파일 내용을 가져오기 위해 AJAX 요청을 보냅니다.
+            // 텍스트 파일 내용을 가져오기 위한 AJAX 요청을 보냅니다.
             fetch('/poll_file/', { method: 'GET' })
                 .then(response => response.text())
                 .then(newContent => {
-                    // 새로운 내용이 이전 내용과 다르다면 페이지를 업데이트하고 로그에 기록합니다.
+                    // 새로운 텍스트 파일 내용이 이전 내용과 다르다면 페이지를 업데이트하고 로그에 기록합니다.
                     if (newContent !== oldFileContent) {
-                        const message = `Content Updated: ${oldFileContent} => ${newContent}`;
+                        const message = `Text Content Updated: ${oldFileContent} => ${newContent}`;
                         addLogMessage(message);
 
                         document.getElementById('file-content').textContent = newContent;
-                        oldFileContent = newContent; // 변경된 내용을 저장합니다.
+                        oldFileContent = newContent; // 변경된 텍스트 내용을 저장합니다.
+                    }
+                });
+
+            // 이미지 파일 URL을 가져오기 위한 AJAX 요청을 보냅니다.
+            fetch('/poll_image/', { method: 'GET' })
+                .then(response => response.text())
+                .then(newImageURL => {
+                    // 새로운 이미지 URL이 이전 URL과 다르다면 이미지를 업데이트합니다.
+                    if (newImageURL !== oldImageURL) {
+                        const message = `Image Updated: ${oldImageURL} => ${newImageURL}`;
+                        addLogMessage(message);
+
+                        document.getElementById('image-content').src = newImageURL;
+                        oldImageURL = newImageURL; // 변경된 이미지 URL을 저장합니다.
                     }
                 });
         }
