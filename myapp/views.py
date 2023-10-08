@@ -14,33 +14,42 @@ def poll_file_content(request):
     # 파일 내용을 그대로 반환합니다.
     return HttpResponse(content, content_type='application/json')
 
-from django.shortcuts import render
-from django.templatetags.static import static
 
-def display_image(request):
-    image_path = '/home/ubuntu/srv/screenshot.jpg'  # JPG 파일의 경로
-    image_url = static(image_path)
-    return render(request, 'myapp/index.html', {'image_url': image_url})
 
-from django.shortcuts import render
-from django.templatetags.static import static
+
+
+from django.core.files import File
+from django.conf import settings
+from .models import Image
+
+def upload_image(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+
+        # 이미지 파일 경로
+        image_path = '/home/ubuntu/srv/screenshot.jpg'
+
+        # 이미지를 MEDIA_ROOT로 복사
+        with open(image_path, 'rb') as img_file:
+            image = Image(title=title)
+            image.image_file.save('screenshot.jpg', File(img_file), save=True)
+
+        return redirect('image_viewer:display_images')
+
+    return render(request, 'upload_image.html')
+
 from django.http import JsonResponse
+import os
 
 def poll_image(request):
-    image_path = '/home/ubuntu/srv/screenshot.jpg'  # JPG 파일의 경로
-    image_url = static(image_path)
+    # 이미지 파일의 절대 경로를 설정합니다.
+    image_path = '/home/ubuntu/srv/screenshot.jpg'
+
+    # 파일 경로에서 파일 이름만 추출합니다.
+    image_name = os.path.basename(image_path)
+
+    # 이미지 파일의 절대 URL을 생성합니다.
+    image_url = request.build_absolute_uri(image_name)
+
+    # JSON 응답으로 이미지 URL을 반환합니다.
     return JsonResponse({'image_url': image_url})
-
-from django.http import HttpResponse
-
-def display_image(request):
-    image_path = '/home/ubuntu/srv/screenshot.jpg'  # JPG 파일의 경로
-
-    # 이미지 파일을 읽어옵니다.
-    with open(image_path, 'rb') as image_file:
-        image_data = image_file.read()
-
-    # MIME 타입을 'image/jpeg'로 설정하여 이미지 파일을 반환합니다.
-    return HttpResponse(image_data, content_type='image/jpeg')
-
-

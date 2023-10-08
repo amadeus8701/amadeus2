@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Text and Image Content</title>
+    <title>Image Viewer</title>
 </head>
 <body>
-    <h1>Text File Content</h1>
-    <pre id="file-content">{{ content.content }}</pre>
+    <h1>Image Viewer</h1>
+
+    <!-- 이미지를 표시할 div 요소 -->
+    <div id="image-container">
+        <img id="image" src="{% url 'poll_image' %}" alt="">
+    </div>
     
-    <!-- 이미지 표시 영역 -->
-    <h2>Image</h2>
-    <img id="image-content" src="{{ image_url }}" alt="Image">
-    
-    <!-- 새로운 입력을 보여줄 로그 영역 -->
-    <h2>Real-Time Log</h2>
-    <ul id="log-list" style="overflow-y: scroll; max-height: 300px;">
+    <!-- 새로운 이미지 경로를 보여줄 로그 영역 -->
+    <h2>Real-Time Image Log</h2>
+    <ul id="image-log-list" style="overflow-y: scroll; max-height: 300px;">
         <!-- 이전 로그 항목들을 여기에 추가 -->
     </ul>
     
     <script>
-        let oldFileContent = "{{ content.content }}"; // 초기 파일 내용을 저장합니다.
-        let oldImageURL = "{{ image_url }}"; // 초기 이미지 URL을 저장합니다.
+        let oldImagePath = ""; // 초기 이미지 경로를 저장합니다.
         let logCount = 0; // 로그 항목 개수를 추적합니다.
 
-        function addLogMessage(message) {
-            const logList = document.getElementById('log-list');
+        function addImageLogMessage(message) {
+            const logList = document.getElementById('image-log-list');
             const logItem = document.createElement('li');
             logItem.textContent = message;
             logList.appendChild(logItem);
@@ -39,38 +38,25 @@
             logList.scrollTop = logList.scrollHeight;
         }
 
-        function pollFileContent() {
-            // 텍스트 파일 내용을 가져오기 위한 AJAX 요청을 보냅니다.
-            fetch('/poll_file/', { method: 'GET' })
-                .then(response => response.text())
-                .then(newContent => {
-                    // 새로운 텍스트 파일 내용이 이전 내용과 다르다면 페이지를 업데이트하고 로그에 기록합니다.
-                    if (newContent !== oldFileContent) {
-                        const message = `Text Content Updated: ${oldFileContent} => ${newContent}`;
-                        addLogMessage(message);
-
-                        document.getElementById('file-content').textContent = newContent;
-                        oldFileContent = newContent; // 변경된 텍스트 내용을 저장합니다.
-                    }
-                });
-
-            // 이미지 파일 URL을 가져오기 위한 AJAX 요청을 보냅니다.
+        function pollImage() {
+            // 이미지 파일 경로를 가져오기 위해 AJAX 요청을 보냅니다.
             fetch('/poll_image/', { method: 'GET' })
                 .then(response => response.text())
-                .then(newImageURL => {
-                    // 새로운 이미지 URL이 이전 URL과 다르다면 이미지를 업데이트합니다.
-                    if (newImageURL !== oldImageURL) {
-                        const message = `Image Updated: ${oldImageURL} => ${newImageURL}`;
-                        addLogMessage(message);
+                .then(newImagePath => {
+                    // 새로운 이미지 경로가 이전 경로와 다르다면 페이지를 업데이트하고 로그에 기록합니다.
+                    if (newImagePath !== oldImagePath) {
+                        const message = `Image Updated: ${oldImagePath} => ${newImagePath}`;
+                        addImageLogMessage(message);
 
-                        document.getElementById('image-content').src = newImageURL;
-                        oldImageURL = newImageURL; // 변경된 이미지 URL을 저장합니다.
+                        const image = document.getElementById('image');
+                        image.src = newImagePath;
+                        oldImagePath = newImagePath; // 변경된 경로를 저장합니다.
                     }
                 });
         }
 
-        // 1초마다 파일 변경을 확인하기 위해 폴링 함수를 호출합니다.
-        setInterval(pollFileContent, 1000);
+        // 1초마다 이미지 파일 변경을 확인하기 위해 폴링 함수를 호출합니다.
+        setInterval(pollImage, 1000);
     </script>
 </body>
 </html>

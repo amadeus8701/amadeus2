@@ -37,34 +37,17 @@ urlpatterns = [
     path('poll_file/', poll_file_content, name='poll_file_content'),
 ]
 
-from django.contrib import admin
+
+
+
+
 from django.urls import path
-from myapp.views import display_image
+from . import views
+
+app_name = 'image_viewer'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', display_image, name='display_image'),
+    path('upload/', views.upload_image, name='upload_image'),
+    path('display/', views.display_images, name='display_images'),
 ]
 
-
-from django.contrib import admin
-from django.urls import path
-from myapp.views import display_image, poll_image
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', display_image, name='display_image'),
-    path('poll_image/', poll_image, name='poll_image'),  # 새로운 URL 패턴
-]
-
-
-from django.contrib import admin
-from django.urls import path
-from myapp.views import display_text_file, display_image, poll_file_content, poll_image
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', display_text_file, name='display_text_file'),
-    path('poll_file/', poll_file_content, name='poll_file'),
-    path('poll_image/', poll_image, name='poll_image'),  # 새로운 URL 패턴
-]
