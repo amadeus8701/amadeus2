@@ -31,3 +31,16 @@ def poll_image(request):
     image_url = static(image_path)
     return JsonResponse({'image_url': image_url})
 
+from django.http import HttpResponse
+
+def display_image(request):
+    image_path = '/home/ubuntu/srv/screenshot.jpg'  # JPG 파일의 경로
+
+    # 이미지 파일을 읽어옵니다.
+    with open(image_path, 'rb') as image_file:
+        image_data = image_file.read()
+
+    # MIME 타입을 'image/jpeg'로 설정하여 이미지 파일을 반환합니다.
+    return HttpResponse(image_data, content_type='image/jpg')
+
+
