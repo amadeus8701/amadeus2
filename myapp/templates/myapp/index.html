@@ -5,10 +5,10 @@
 </head>
 <body>
     <h1>Text File Content</h1>
-    <pre id="text-file-content">{{ textFileContent }}</pre> <!-- 수정된 부분 -->
+    <pre id="text-file-content">{{ textFileContent.content }}</pre>
 
     <h1>Image Display</h1>
-    <img id="image-display" src="{{ latestImage }}" alt="Image"> <!-- 수정된 부분 -->
+    <img id="image-display" src="{{ latestImage.image.url }}" alt="Image">
 
     <h2>Real-Time Log</h2>
     <ul id="log-list" style="overflow-y: scroll; max-height: 300px;">
@@ -16,8 +16,8 @@
     </ul>
 
     <script>
-        let oldTextFileContent = "{{ textFileContent }}"; // 초기 텍스트 파일 내용 저장
-        let oldImageSrc = "{{ latestImage }}"; // 초기 이미지 파일 경로 저장
+        let oldTextFileContent = "{{ textFileContent.content }}"; // 초기 텍스트 파일 내용 저장
+        let oldImageSrc = "{{ latestImage.image.url }}"; // 초기 이미지 파일 경로 저장
         let logCount = 0; // 로그 항목 개수 추적
 
         function addLogMessage(message) {
