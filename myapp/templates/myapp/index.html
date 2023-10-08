@@ -1,18 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Text File Content</title>
+    <title>Text File Content and Uploaded Files</title>
 </head>
 <body>
     <h1>Text File Content</h1>
     <pre id="file-content">{{ content.content }}</pre>
-    
-    <!-- 새로운 입력을 보여줄 로그 영역 -->
+
     <h2>Real-Time Log</h2>
     <ul id="log-list" style="overflow-y: scroll; max-height: 300px;">
         <!-- 이전 로그 항목들을 여기에 추가 -->
     </ul>
-    
+
+    <!-- 파일 업로드 양식 -->
+    <h2>Uploaded Files</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="file">
+        <button type="submit">Upload</button>
+    </form>
+    <h3>Most Recent Uploaded File:</h3>
+    {% if latest_file %}
+        <img src="{{ latest_file }}" alt="Recent Image">
+    {% else %}
+        <p>No file uploaded yet.</p>
+    {% endif %}
+    <h3>Uploaded Files Log:</h3>
+    <ul>
+        {% for line in log_contents %}
+            <li>{{ line }}</li>
+        {% endfor %}
+    </ul>
+
     <script>
         let oldFileContent = "{{ content.content }}"; // 초기 파일 내용을 저장합니다.
         let logCount = 0; // 로그 항목 개수를 추적합니다.
@@ -23,13 +42,13 @@
             logItem.textContent = message;
             logList.appendChild(logItem);
             logCount++;
-            
+
             // 로그 항목이 15개를 초과하면 첫 번째 항목을 제거합니다.
             if (logCount > 15) {
                 logList.removeChild(logList.firstChild);
                 logCount--;
             }
-            
+
             // 스크롤을 항상 가장 아래로 유지합니다.
             logList.scrollTop = logList.scrollHeight;
         }
