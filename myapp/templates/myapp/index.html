@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Text File Content</title>
+    <title>Combined Viewer</title>
 </head>
 <body>
     <h1>Text File Content</h1>
     <pre id="file-content">{{ content.content }}</pre>
     
     <!-- 새로운 입력을 보여줄 로그 영역 -->
-    <h2>Real-Time Log</h2>
+    <h2>Real-Time Log (Text File)</h2>
     <ul id="log-list" style="overflow-y: scroll; max-height: 300px;">
         <!-- 이전 로그 항목들을 여기에 추가 -->
     </ul>
+
+    <hr> <!-- 수평선을 추가하여 두 부분 구분 -->
+
+    <h1>Image Viewer</h1>
+    
+    <!-- 가장 최근 이미지 표시 -->
+    <img src="{{ image_path }}" alt="스크린샷" style="max-width: 100%; height: auto;">
+
+    <!-- 이전 업로드 이미지 표시를 위한 로그 영역 -->
+    <h2>Uploaded Images Log</h2>
+    <ul id="image-log" style="overflow-y: scroll; max-height: 300px;">
+        <!-- 이전 이미지 추가 -->
+    </ul>
     
     <script>
+        // Text File Viewer 코드
         let oldFileContent = "{{ content.content }}"; // 초기 파일 내용을 저장합니다.
         let logCount = 0; // 로그 항목 개수를 추적합니다.
 
@@ -41,7 +55,7 @@
                 .then(newContent => {
                     // 새로운 내용이 이전 내용과 다르다면 페이지를 업데이트하고 로그에 기록합니다.
                     if (newContent !== oldFileContent) {
-                        const message = `Content Updated: ${oldFileContent} => ${newContent}`;
+                        const message = `Text File Updated: ${oldFileContent} => ${newContent}`;
                         addLogMessage(message);
 
                         document.getElementById('file-content').textContent = newContent;
@@ -52,6 +66,41 @@
 
         // 1초마다 파일 변경을 확인하기 위해 폴링 함수를 호출합니다.
         setInterval(pollFileContent, 1000);
+
+        // Image Viewer 코드
+        let imageLogCount = 0;
+
+        function addImageLogEntry(entry) {
+            const imageLogList = document.getElementById('image-log');
+            const imageListItem = document.createElement('li');
+            imageListItem.textContent = entry;
+            imageLogList.appendChild(imageListItem);
+            imageLogCount++;
+
+            if (imageLogCount > 5) {
+                imageLogList.removeChild(imageLogList.firstChild);
+                imageLogCount--;
+            }
+
+            imageLogList.scrollTop = imageLogList.scrollHeight;
+        }
+
+        function pollImage() {
+            fetch('/poll_image/', { method: 'GET' })
+                .then(response => response.blob())
+                .then(imageBlob => {
+                    const imagePath = "{{ image_path }}";
+                    const image = document.querySelector('img');
+
+                    if (imageBlob.size > 0 && imagePath !== image.src) {
+                        image.src = imagePath;
+                        addImageLogEntry(`Image Updated: ${imagePath}`);
+                    }
+                });
+        }
+
+        // 5초마다 이미지 변경을 확인하기 위해 폴링 함수를 호출합니다.
+        setInterval(pollImage, 1000);
     </script>
 </body>
 </html>
