@@ -41,6 +41,6 @@ def display_image(request):
         image_data = image_file.read()
 
     # MIME 타입을 'image/jpeg'로 설정하여 이미지 파일을 반환합니다.
-    return HttpResponse(image_data, content_type='image/jpg')
+    return HttpResponse(image_data, content_type='image/jpeg')
 
 
