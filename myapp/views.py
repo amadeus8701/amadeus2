@@ -15,16 +15,24 @@ def poll_file_content(request):
     return HttpResponse(content, content_type='application/json')
 
 
-import os
-from django.http import HttpResponse
+
+
+
 from django.shortcuts import render
+from .models import Image
 
 def display_image(request):
-    image_path = '/home/ubuntu/srv/screenshot.jpg'
-    return render(request, 'myapp/index.html', {'image_path': image_path})
+    latest_image = Image.objects.latest('uploaded_at')
+    return render(request, 'myapp/index.html', {'latest_image': latest_image})
 
-def poll_image(request):
-    image_path = '/home/ubuntu/srv/screenshot.jpg'
-    with open(image_path, 'rb') as image_file:
-        image_data = image_file.read()
-    return HttpResponse(image_data, content_type='image/jpeg')
+from .forms import ImageForm
+
+def upload_image(request):
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+    else:
+        form = ImageForm()
+    return render(request, 'myapp/index.html', {'form': form})
+

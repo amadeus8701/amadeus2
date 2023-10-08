@@ -36,3 +36,22 @@ urlpatterns = [
     path('', display_text_file, name='display_text_file'),
     path('poll_file/', poll_file_content, name='poll_file_content'),
 ]
+
+
+
+
+
+
+from django.contrib import admin
+from django.urls import path, include
+from myapp.views import display_image
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', display_image, name='display_image'),
+]
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
