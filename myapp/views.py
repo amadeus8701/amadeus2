@@ -16,9 +16,10 @@ def poll_file_content(request):
 
 
 
+
 from django.http import HttpResponse
 import os
-import random  # 랜덤 파라미터를 생성하기 위해 random 모듈을 임포트합니다
+from datetime import datetime
 
 # ...
 
@@ -32,5 +33,9 @@ def serve_image(request):
     response['Pragma'] = 'no-cache'
     response['Expires'] = '0'
     response['Cache-Control'] = 'public, max-age=0'
+    
+    # 이미지의 최종 수정 시간을 설정하여 브라우저가 변경을 감지하도록 합니다
+    image_modified_time = os.path.getmtime(image_path)
+    response['Last-Modified'] = datetime.utcfromtimestamp(image_modified_time).strftime('%a, %d %b %Y %H:%M:%S GMT')
 
     return response
