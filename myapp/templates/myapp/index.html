@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>이미지 뷰어</h1>
-    <img src="{% url 'serve_image' %}?{% now 'U' %}" alt="Screenshot">
+    <img src="" alt="Screenshot" id="screenshot">
 
     <hr>
 
@@ -39,6 +39,14 @@
             logList.scrollTop = logList.scrollHeight;
         }
 
+        function loadNewImage() {
+            // 이미지를 새로 로드하기 위해 이미지 URL에 무작위 쿼리 문자열을 추가합니다.
+            const imageElement = document.getElementById('screenshot');
+            const randomQueryString = '?nocache=' + Math.random();
+            const imageUrl = "{% url 'serve_image' %}" + randomQueryString;
+            imageElement.src = imageUrl;
+        }
+
         function pollFileContent() {
             // 파일 내용을 가져오기 위해 AJAX 요청을 보냅니다.
             fetch('/poll_file/', { method: 'GET' })
@@ -53,14 +61,14 @@
                         oldFileContent = newContent; // 변경된 내용을 저장합니다.
                     }
                 });
-
-            // 이미지를 새로 로드합니다.
-            const imageElement = document.querySelector('img');
-            imageElement.src = "{% url 'serve_image' %}?{% now 'U' %}";
         }
+
+        // 페이지 로드 시 최초로 이미지를 로드합니다.
+        loadNewImage();
 
         // 1초마다 파일 변경과 이미지 변경을 확인하기 위해 폴링 함수를 호출합니다.
         setInterval(pollFileContent, 1000);
+        setInterval(loadNewImage, 1000); // 이미지를 1초마다 새로 로드합니다.
     </script>
 </body>
 </html>
