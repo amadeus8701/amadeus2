@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>이미지 뷰어</h1>
-    <img src="{% url 'serve_image' %}" alt="Screenshot">
+    <img src="{% url 'serve_image' %}?t={{ timestamp }}" alt="Screenshot" id="screenshot">
 
     <hr>
 
@@ -51,6 +51,10 @@
 
                         document.getElementById('file-content').textContent = newContent;
                         oldFileContent = newContent; // 변경된 내용을 저장합니다.
+                        
+                        // 랜덤한 쿼리 문자열을 생성하여 이미지 URL에 추가하여 캐시 우회
+                        const timestamp = Date.now();
+                        document.getElementById('screenshot').src = `/screenshot.jpg?t=${timestamp}`;
                     }
                 });
         }
@@ -60,4 +64,3 @@
     </script>
 </body>
 </html>
-

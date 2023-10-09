@@ -15,27 +15,13 @@ def poll_file_content(request):
     return HttpResponse(content, content_type='application/json')
 
 
-
-
 from django.http import HttpResponse
 import os
-import random
-
-# ...
 
 def serve_image(request):
-    image_path = '/home/ubuntu/srv/screenshot.jpg'
+    image_path = '/home/ubuntu/srv/screenshot.jpg'  # JPG 파일의 경로
     with open(image_path, 'rb') as image_file:
         response = HttpResponse(image_file.read(), content_type='image/jpeg')
-    
-    # 더 강력한 캐시 무효화 헤더를 설정합니다
-    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    response['Pragma'] = 'no-cache'
-    response['Expires'] = '0'
-
-    # 랜덤 파라미터를 이미지 URL에 추가하여 캐시 무효화를 수행합니다
-    image_url = reverse('serve_image')
-    image_url += f'?{random.randint(0, 100000)}'  # 랜덤 파라미터를 추가합니다
-    response['Location'] = image_url
-
     return response
+
+
