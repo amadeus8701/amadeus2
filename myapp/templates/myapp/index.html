@@ -35,56 +35,63 @@
     </ul>
 
     <script>
-        let oldFileContent = "{{ content.content }}"; // 초기 파일 내용을 저장합니다.
-        let logCount = 0; // 로그 항목 개수를 추적합니다.
-
+        let oldFileContent = "{{ content.content }}"; // 초기 파일 내용 저장.
+        let logCount = 0; // 로그 항목 수를 추적.
+    
+        function getCurrentTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            return `${hours}:${minutes}:${seconds}`;
+        }
+    
         function addLogMessage(message) {
             const logList = document.getElementById('log-list');
             const logItem = document.createElement('li');
-            logItem.textContent = message;
+            const timestamp = getCurrentTime(); // 현재 타임스탬프 가져오기
+            logItem.textContent = `[${timestamp}] ${message}`;
             logList.appendChild(logItem);
             logCount++;
-
-            // 로그 항목이 15개를 초과하면 첫 번째 항목을 제거합니다.
+    
+            // 로그 항목이 15개 이상인 경우, 첫 번째 항목을 제거합니다.
             if (logCount > 15) {
                 logList.removeChild(logList.firstChild);
                 logCount--;
             }
-
-            // 스크롤을 항상 가장 아래로 유지합니다.
+    
+            // 항상 스크롤을 아래로 유지합니다.
             logList.scrollTop = logList.scrollHeight;
         }
-
+    
         function loadNewImage() {
-            // 이미지를 새로 로드하기 위해 이미지 URL에 무작위 쿼리 문자열을 추가합니다.
+            // 이미지를 다시 로드하려면 이미지 URL에 무작위 쿼리 문자열을 추가합니다.
             const imageElement = document.getElementById('screenshot');
             const randomQueryString = '?nocache=' + Math.random();
             const imageUrl = "{% url 'serve_image' %}" + randomQueryString;
             imageElement.src = imageUrl;
         }
-
+    
         function pollFileContent() {
             // 파일 내용을 가져오기 위해 AJAX 요청을 보냅니다.
             fetch('/poll_file/', { method: 'GET' })
                 .then(response => response.text())
                 .then(newContent => {
-                    // 새로운 내용이 이전 내용과 다르다면 페이지를 업데이트하고 로그에 기록합니다.
+                    // 새 내용이 이전 내용과 다른 경우, 페이지를 업데이트하고 로그에 기록합니다.
                     if (newContent !== oldFileContent) {
                         const message = `내용 업데이트: ${oldFileContent} => ${newContent}`;
                         addLogMessage(message);
-
+    
                         document.getElementById('file-content').textContent = newContent;
-                        oldFileContent = newContent; // 변경된 내용을 저장합니다.
+                        oldFileContent = newContent; // 변경 사항 저장.
                     }
                 });
         }
-
-        // 페이지 로드 시 최초로 이미지를 로드합니다.
+    
+        // 페이지가 로드될 때 이미지를 먼저 로드합니다.
         loadNewImage();
-
-        // 1초마다 파일 변경과 이미지 변경을 확인하기 위해 폴링 함수를 호출합니다.
+    
+        // 파일 변경과 이미지 변경을 확인하기 위해 매 초마다 폴링 함수 호출
         setInterval(pollFileContent, 1000);
-        setInterval(loadNewImage, 1000); // 이미지를 1초마다 새로 로드합니다.
+        setInterval(loadNewImage, 1000); // 매 초마다 새 이미지 로드.
     </script>
-</body>
-</html>
