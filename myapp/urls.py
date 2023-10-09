@@ -12,5 +12,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('serve_image/', views.serve_image, name='serve_image'),
+    path('', views.serve_image, name='serve_image'),
 ]

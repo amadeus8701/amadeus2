@@ -22,7 +22,6 @@ urlpatterns = [
     path('', include('myapp.urls')),
 ]
 
-
 from django.urls import path
 from myapp.views import display_text_file
 
