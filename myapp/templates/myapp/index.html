@@ -53,9 +53,13 @@
                         oldFileContent = newContent; // 변경된 내용을 저장합니다.
                     }
                 });
+
+            // 이미지를 새로 로드합니다.
+            const imageElement = document.querySelector('img');
+            imageElement.src = "{% url 'serve_image' %}?{% now 'U' %}";
         }
 
-        // 1초마다 파일 변경을 확인하기 위해 폴링 함수를 호출합니다.
+        // 1초마다 파일 변경과 이미지 변경을 확인하기 위해 폴링 함수를 호출합니다.
         setInterval(pollFileContent, 1000);
     </script>
 </body>
