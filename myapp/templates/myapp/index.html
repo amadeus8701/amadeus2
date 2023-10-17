@@ -3,29 +3,29 @@
 <head>
     <title>이미지 뷰어와 텍스트 파일</title>
     <style>
-        /* '이미지 뷰어' 텍스트 크기와 동일하게 설정 */
+        /* '이미지 뷰어' 텍스트 크기 */
         h1, h2, h3 {
             font-size: 5em;
         }
 
-        /* '텍스트 파일 내용'의 폰트 크기를 5배로 설정 */
+        /* '텍스트 파일 내용'의 폰트 크기 */
         #file-content {
             font-size: 5em;
         }
 
-        /* 이미지 크기를 25%로 줄임 */
+        /* 이미지 크기 */
         #screenshot {
             width: 100%;
         }
     </style>
 </head>
 <body>
-    <h1>이미지 뷰어</h1>
+    <h1>감시 카메라</h1>
     <img src="{% url 'serve_image' %}?{% now 'U' %}" alt="Screenshot" id="screenshot">
 
     <hr>
 
-    <h2>텍스트 파일 내용</h2>
+    <h2>감지기 작동 유무</h2>
     <pre id="file-content">{{ content.content }}</pre>
 
     <!-- 새로운 입력을 보여줄 로그 영역 -->
